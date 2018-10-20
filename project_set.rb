@@ -40,7 +40,11 @@ class ProjectSet
         travel = true # a gap sets travel back to true
         @reimbursement_values[date - 1] = project_for(date - 1).travel_cost # Set the preceding date to travel - it was the last day in project
       elsif project_for(date) # Not traveling - record this date
-        @reimbursement_values[date] = date == end_date ? project_for(date).travel_cost : project_for(date).date_cost(travel)
+        if not (travel || date == end_date) or @projects.select{|project| project.on?(date) }.length > 1
+          @reimbursement_values[date] = project_for(date).full_cost
+        else
+          @reimbursement_values[date] = project_for(date).travel_cost
+        end
         travel = false
       end
     end

@@ -10,6 +10,7 @@ describe ProjectSet do
     end
 
     it "has the correct sum for the first project set" do
+      # Sum is 45 (low cost travel) + 75 (low cost full) + 45 (low cost travel) = 165
       expect(first_set.reimbursement).to eq(165)
     end
   end
@@ -43,6 +44,23 @@ describe ProjectSet do
     it "has the correct sum for the third project set" do
       # Sum is 45 (low-cost travel) + 75 (low cost full) + 45 (low cost travel) + 0 (none) + 55 (high cost travel) + 2 * 85 (high cost full) + 55 (high cost travel) = 445
       expect(third_set.reimbursement).to eq(445)
+    end
+  end
+
+  context "set #4" do
+    let(:first_project) { Project.new("2015-9-1", "2015-9-1", "low") }
+    let(:second_project) { Project.new("2015-9-1", "2015-9-1", "low") }
+    let(:third_project) { Project.new("2015-9-2", "2015-9-2", "high") }
+    let(:fourth_project) { Project.new("2015-9-2", "2015-9-3", "high") }
+    let(:fourth_set) { ProjectSet.new([first_project, second_project, third_project, fourth_project]) }
+    
+    it "has the duration between 9/1 and 9/3" do
+      expect(fourth_set.duration).to eq((Date.parse("2015-9-1")..Date.parse("2015-9-3")))
+    end
+
+    it "has the correct sum for the fourth project set" do
+      # Sum is 75 (low costfull - 2 projects) + 85 (high cost full - 2 projects) + 55 (high cost travel) = 215
+      expect(fourth_set.reimbursement).to eq(215) 
     end
   end
 end
