@@ -36,10 +36,10 @@ class ProjectSet
   def calculate_values
     travel = true # First day of project sequence is a travel day
     duration.each do |date|
-      if not travel and project_for(date).nil?
+      if project_for(date).nil?
         travel = true # a gap sets travel back to true
-        @reimbursement_values[date - 1] = project_for(date - 1).travel_cost # Set the preceding date to travel - it was the last day in project
-      elsif project_for(date) # Not traveling - record this date
+        @reimbursement_values[date - 1] = project_for(date - 1).travel_cost if project_for(date - 1) # Set the preceding date to travel - it was the last day in project
+      else # Not traveling - record this date
         if not (travel || date == end_date) or @projects.select{|project| project.on?(date) }.length > 1
           @reimbursement_values[date] = project_for(date).full_cost
         else
