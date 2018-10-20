@@ -1,4 +1,3 @@
-require 'byebug'
 require_relative '../project_set'
 
 describe ProjectSet do
